@@ -11,24 +11,29 @@ const passport = require('passport');
 // ! REQUIRED TO GET STRATEGY EXPORTED FROM PASSPORT.JS CONFIG FILE
 require('../../config/passport')(passport);
 
+// Validation Functions
+const validateRegisterInput = require('../../validation/register');
+const validateLoginInput = require('../../validation/login');
+
+
 // Test /api/users route
 router.get("/test", (req, res) => res.json({ msg: "This is the USERS route!"}));
 
-function validateRegisterInput(body) {
-  const res = {
-    errors: [],
-    isValid: false
-  }
-  if (!body.handle || !body.password || !body.email) {
-    // return res.status(400).json({ msg: "Missing fields" });
-    res.errors.push("Missing required fields");
-  } else if (body.password.length < 6) {
-    res.errors.push("Password needs to be at least 6 characters")
-  } else {
-    res.isValid = true;
-  }
-  return res;
-}
+// function validateRegisterInput(body) {
+//   const res = {
+//     errors: [],
+//     isValid: false
+//   }
+//   if (!body.handle || !body.password || !body.email) {
+//     // return res.status(400).json({ msg: "Missing fields" });
+//     res.errors.push("Missing required fields");
+//   } else if (body.password.length < 6) {
+//     res.errors.push("Password needs to be at least 6 characters")
+//   } else {
+//     res.isValid = true;
+//   }
+//   return res;
+// }
 
 // Register
 router.post('/register', (req, res) => {
@@ -42,8 +47,9 @@ router.post('/register', (req, res) => {
   User.findOne({ email: req.body.email })
     .then(user => {
       if (user) {
-        // Throw 400 error if email exists
-        return res.status(400).json({ email: "Email already registered"});
+        // Throw 400 error if email exists + use validations
+        errors.email = "Email already exists";
+        return res.status(400).json(errors);
       } else {
         // Else create new user
         const newUser = new User({
@@ -84,7 +90,7 @@ router.post('/register', (req, res) => {
 router.post('/login', (req, res) => {
   // const email = req.body.email;
   // const password = req.body.password;
-  const { errors, isValid } = validateRegisterInput(req.body);
+  const { errors, isValid } = validateLoginInput(req.body);
   if (!isValid) {
     return res.status(400).json(errors);
   }
@@ -92,7 +98,8 @@ router.post('/login', (req, res) => {
   User.findOne({ email: req.body.email })
     .then( user => {
       if (!user) {
-        return res.status(404).json({ email: "This user does not exist" })
+        errors.email = "User not found";
+        return res.status(404).json(errors);
       } else {
         bcrypt.compare(req.body.password, user.password)
           .then( isMatch => {
@@ -116,7 +123,8 @@ router.post('/login', (req, res) => {
               );
               // res.json({ msg: "Success!" });
             } else {
-              return res.status(400).json({ password: "Incorrect password"});
+              errors.password = "Incorrect password";
+              return res.status(400).json(errors);
             }
           })
       }
