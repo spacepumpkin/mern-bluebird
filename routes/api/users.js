@@ -17,23 +17,7 @@ const validateLoginInput = require('../../validation/login');
 
 
 // Test /api/users route
-router.get("/test", (req, res) => res.json({ msg: "This is the USERS route!"}));
-
-// function validateRegisterInput(body) {
-//   const res = {
-//     errors: [],
-//     isValid: false
-//   }
-//   if (!body.handle || !body.password || !body.email) {
-//     // return res.status(400).json({ msg: "Missing fields" });
-//     res.errors.push("Missing required fields");
-//   } else if (body.password.length < 6) {
-//     res.errors.push("Password needs to be at least 6 characters")
-//   } else {
-//     res.isValid = true;
-//   }
-//   return res;
-// }
+// router.get("/test", (req, res) => res.json({ msg: "This is the USERS route!"}));
 
 // Register
 router.post('/register', (req, res) => {
@@ -131,7 +115,7 @@ router.post('/login', (req, res) => {
     })
 })
 
-// Auth Route
+// Auth Route for Current User
 router.get('/current', passport.authenticate('jwt', { session: false }), (req, res) => {
   // res.json({ msg: "Success"});
   res.json({

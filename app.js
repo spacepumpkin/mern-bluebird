@@ -41,7 +41,10 @@ app.use(bodyParser.json()); // want to respond to json
 app.use(passport.initialize());
 app.use("/api/users", users);
 app.use("/api/tweets", tweets);
-
+app.all("/secret", (req, res, next) => {
+  console.log("Accessing secrets...");
+  next();
+})
 
 
 // Set Heroku port and localhost port
