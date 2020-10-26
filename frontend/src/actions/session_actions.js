@@ -29,7 +29,7 @@ export const signup = (user) => (dispatch) => (
   APIUtil.signup(user).then(() => (
     dispatch(receiveUserSignIn())
   ), err => (
-    dispath(receiveErrors(err.response.data))
+    dispatch(receiveErrors(err.response.data))
   ))
 );
 

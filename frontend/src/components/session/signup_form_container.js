@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
-import { login } from '../../actions/session_actions';
-import LoginForm from './login_form';
+import { signup } from '../../actions/session_actions';
+import SignupForm from './signup_form';
 
 const mSP = state => ({
   signedIn: state.session.isSignedIn,

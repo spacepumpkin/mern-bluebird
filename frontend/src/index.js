@@ -1,7 +1,24 @@
+// import React from 'react';
+// import ReactDOM from 'react-dom';
+// import './index.css';
+// import App from './App';
+// import reportWebVitals from './reportWebVitals';
+
+// ReactDOM.render(
+//   <React.StrictMode>
+//     <App />
+//   </React.StrictMode>,
+//   document.getElementById('root')
+// );
+
+// // If you want to start measuring performance in your app, pass a function
+// // to log results (for example: reportWebVitals(console.log))
+// // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
+// reportWebVitals();
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import Root from './components/root';
+import Root from './root';
 import configureStore from './store/store';
 import jwt_decode from 'jwt-decode';
 
@@ -14,11 +31,12 @@ document.addEventListener("DOMContentLoaded", () => {
     setAuthToken(localStorage.jwtToken);
     const decodedUser = jwt_decode(localStorage.jwtToken);
 
-    const preloadedState = { 
-      session: { 
-        isAuthenticated: true, 
-        user: decodedUser 
-      }};
+    const preloadedState = {
+      session: {
+        isAuthenticated: true,
+        user: decodedUser
+      }
+    };
 
     store = configureStore(preloadedState);
 
@@ -32,7 +50,7 @@ document.addEventListener("DOMContentLoaded", () => {
     store = configureStore({});
   }
   const root = document.getElementById('root');
-
-  ReactDOM.render(<Root store={store}/>, root);
+  // debugger
+  window.store = store;
+  ReactDOM.render(<Root store={store} />, root);
 })
-

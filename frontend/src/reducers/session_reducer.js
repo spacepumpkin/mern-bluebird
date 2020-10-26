@@ -9,21 +9,23 @@ const initialState = {
   user: {}
 };
 
-export default (oldState = initialState, action) => {
+const session_reducer = (oldState = initialState, action) => {
   Object.freeze(oldState);
   switch (action.type) {
     case RECEIVE_USER_LOGOUT:
-      return Object.assign({}, oldState, { 
+      return (Object.assign({}, oldState, { 
         isAuthenticated: false,
-        user: undefined });
+        user: undefined }));
     case RECEIVE_CURRENT_USER:
-      return Object.assign({}, oldState, { 
+      return (Object.assign({}, oldState, { 
         isAuthenticated: !!action.currentUser, 
-        user: action.currentUser });
+        user: action.currentUser }));
     case RECEIVE_USER_SIGN_IN:
-      return Object.assign({}, oldState, { 
-        isSignedIn: true });
+      return (Object.assign({}, oldState, { 
+        isSignedIn: true }));
     default:
       return oldState;
   }
 }
+
+export default session_reducer;
